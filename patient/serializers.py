@@ -6,7 +6,7 @@ from .models import CustomUser
 class InitialRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ["email", "name", "phoneNumber"]
+        fields = ["email", "name", "phone"]
 
 
 class CompleteRegistrationSerializer(serializers.ModelSerializer):

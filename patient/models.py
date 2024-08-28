@@ -42,7 +42,7 @@ class CustomUser(AbstractUser):
     username = None  # Remove username field as we're using email for authentication
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=100)
-    phoneNumber = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15)
 
     # Optional fields to be filled out later
     gender = models.CharField(
@@ -74,7 +74,7 @@ class CustomUser(AbstractUser):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name", "phoneNumber"]
+    REQUIRED_FIELDS = ["name", "phone"]
 
     objects = CustomUserManager()
 

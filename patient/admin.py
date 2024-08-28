@@ -10,7 +10,7 @@ class CustomUserAdmin(UserAdmin):
         (None, {"fields": ("email", "password")}),
         (
             "Personal info",
-            {"fields": ("name", "phoneNumber", "dateOfBirth", "address")},
+            {"fields": ("name", "phone", "dateOfBirth", "address")},
         ),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
@@ -20,13 +20,21 @@ class CustomUserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "name", "phoneNumber", "password1", "password2"),
+                "fields": ("email", "name", "phone", "password1", "password2"),
             },
         ),
     )
     list_display = ("email", "name", "is_staff", "is_superuser")
     search_fields = ("email", "name")
     ordering = ("email",)
+
+    # Prevent 'date_joined' from being editable
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # Editing an existing user
+            return self.readonly_fields + ("date_joined",)
+        return self.readonly_fields
+
+    readonly_fields = ("date_joined",)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
