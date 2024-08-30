@@ -64,8 +64,11 @@ class CustomUser(AbstractUser):
     pastMedicalHistory = models.TextField(blank=True, null=True)
     identificationType = models.CharField(max_length=100, blank=True, null=True)
     identificationNumber = models.CharField(max_length=100, blank=True, null=True)
-    identificationDocumentId = models.CharField(max_length=100, blank=True, null=True)
-    identificationDocumentUrl = models.URLField(blank=True, null=True)
+    # identificationDocumentId = models.CharField(max_length=100, blank=True, null=True)
+    # identificationDocumentUrl = models.URLField(blank=True, null=True)
+    identificationDocument = models.FileField(
+        upload_to="identification_documents/", blank=True, null=True
+    )
     primaryCarePhysician = models.CharField(max_length=100, blank=True, null=True)
     dateOfBirth = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
