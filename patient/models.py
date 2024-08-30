@@ -70,6 +70,8 @@ class CustomUser(AbstractUser):
         upload_to="identification_documents/", blank=True, null=True
     )
     primaryCarePhysician = models.CharField(max_length=100, blank=True, null=True)
+    treatmentConsent = models.BooleanField(default=False)
+    privacyConsent = models.BooleanField(default=False)
     dateOfBirth = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
