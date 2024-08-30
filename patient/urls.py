@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from .views import CompleteRegistrationView, InitialRegistrationView
+from .views import CompleteRegistrationView, InitialRegistrationView, PatientProfileView
 
 urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -14,4 +14,5 @@ urlpatterns = [
         CompleteRegistrationView.as_view(),
         name="complete-registration",
     ),
+    path("<uuid:id>/", PatientProfileView.as_view(), name="patient-profile"),
 ]
