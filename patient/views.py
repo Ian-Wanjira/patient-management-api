@@ -57,6 +57,7 @@ class CompleteRegistrationView(generics.UpdateAPIView):
                 "refresh": str(refresh),
                 "access": str(access_token),
             },
+            {"userId": str(user.id)},
             status=status.HTTP_200_OK,
         )
 
