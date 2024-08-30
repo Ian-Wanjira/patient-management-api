@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -58,3 +59,16 @@ class CompleteRegistrationView(generics.UpdateAPIView):
             },
             status=status.HTTP_200_OK,
         )
+
+
+class PatientProfileView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = InitialRegistrationSerializer
+    permission_classes = []
+
+    def get_object(self):
+        user_id = self.kwargs.get("id")
+        try:
+            return CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            raise NotFound("User not found")
