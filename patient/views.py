@@ -1,5 +1,8 @@
+import json
+
 from rest_framework import generics, status
 from rest_framework.exceptions import NotFound
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -24,31 +27,42 @@ class InitialRegistrationView(generics.CreateAPIView):
 class CompleteRegistrationView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CompleteRegistrationSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_object(self):
         # Retrieve the user by userId from the request data
-        user_id = self.request.data.get("userId")
+        user_id = self.request.data.get("id")
         if not user_id:
-            return Response(
-                {"error": "userId is required to complete registration."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        return generics.get_object_or_404(CustomUser, id=user_id)
+            raise NotFound("User ID is required to complete registration")
+        try:
+            return CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            raise NotFound("User not found")
 
-    def perform_update(self, serializer):
-        user = self.get_object()
+    def put(self, request, *args, **kwargs):
+        # Debugging: print request data to ensure it's being received correctly
+        print("Request Data:", request.data)
+        print("Files: ", request.FILES)
+        user_id = request.data.get("id")
+        if not user_id:
+            raise NotFound("User ID is required to complete registration")
 
-        # Save all fields (including password if provided)
-        updated_user = serializer.save(instance=user)
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            raise NotFound("User not found")
 
-        # Check and update the password if it was provided
-        password = self.request.data.get("password")
-        if password:
-            updated_user.set_password(password)
-            updated_user.save()
+        json_data = request.data.get("json")
+        if json_data:
+            json_data = json.loads(json_data)
+            request.data.update(json_data)
 
-        # Issue JWT tokens upon successful registration completion
-        refresh = RefreshToken.for_user(updated_user)
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        # Issue JWT tokens
+        refresh = RefreshToken.for_user(user)
         access_token = refresh.access_token
 
         return Response(
@@ -57,9 +71,11 @@ class CompleteRegistrationView(generics.UpdateAPIView):
                 "refresh": str(refresh),
                 "access": str(access_token),
             },
-            {"userId": str(user.id)},
             status=status.HTTP_200_OK,
         )
+
+    def perform_update(self, serializer):
+        serializer.save()  # Save the instance
 
 
 class PatientProfileView(generics.RetrieveAPIView):
