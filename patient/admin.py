@@ -5,17 +5,36 @@ from .models import CustomUser
 
 
 class CustomUserAdmin(UserAdmin):
-    # Define the fields to be displayed in the admin interface
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
             "Personal info",
-            {"fields": ("name", "phone", "dateOfBirth", "address")},
+            {"fields": ("name", "phone", "dateOfBirth", "address", "gender")},
+        ),
+        (
+            "Medical info",
+            {
+                "fields": (
+                    "emergencyContactName",
+                    "emergencyContactPhone",
+                    "insuranceProvider",
+                    "insurancePolicyNumber",
+                    "allergies",
+                    "currentMedications",
+                    "familyMedicalHistory",
+                    "pastMedicalHistory",
+                    "identificationType",
+                    "identificationNumber",
+                    "identificationDocument",
+                    "primaryCarePhysician",
+                )
+            },
         ),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
         ("Identification", {"fields": ("id",)}),
     )
+
     add_fieldsets = (
         (
             None,
@@ -25,15 +44,20 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    list_display = ("id", "email", "name", "is_staff", "is_superuser")
-    search_fields = ("id", "email", "name")
-    ordering = ("email",)
 
-    # Prevent 'date_joined' from being editable
-    def get_readonly_fields(self, request, obj=None):
-        if obj:  # Editing an existing user
-            return self.readonly_fields + ("date_joined", "id")
-        return self.readonly_fields
+    list_display = (
+        "id",
+        "email",
+        "name",
+        "phone",
+        "is_staff",
+        "is_superuser",
+        "gender",
+        "dateOfBirth",
+        "address",
+    )
+    search_fields = ("id", "email", "name", "phone")
+    ordering = ("email",)
 
     readonly_fields = ("date_joined", "id")
 
