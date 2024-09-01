@@ -1,6 +1,6 @@
 import uuid
 
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 
@@ -9,15 +9,14 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
 
-        if password:  # Only set the password if provided
+        try:
+            user = self.model(email=email, **extra_fields)
             user.set_password(password)
-        else:
-            user.set_unusable_password()  # Set an unusable password if none is provided
-
-        user.save(using=self._db)
-        return user
+            user.save(using=self._db)
+            return user
+        except Exception as e:
+            print(e)
 
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
@@ -31,7 +30,7 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractBaseUser):
     GENDER_CHOICES = [
         ("male", "Male"),
         ("female", "Female"),
@@ -64,10 +63,8 @@ class CustomUser(AbstractUser):
     pastMedicalHistory = models.TextField(blank=True, null=True)
     identificationType = models.CharField(max_length=100, blank=True, null=True)
     identificationNumber = models.CharField(max_length=100, blank=True, null=True)
-    # identificationDocumentId = models.CharField(max_length=100, blank=True, null=True)
-    # identificationDocumentUrl = models.URLField(blank=True, null=True)
     identificationDocument = models.FileField(
-        upload_to="identification_documents/", blank=True, null=True
+        upload_to="identification_documents/",
     )
     primaryCarePhysician = models.CharField(max_length=100, blank=True, null=True)
     treatmentConsent = models.BooleanField(default=False)
@@ -79,7 +76,7 @@ class CustomUser(AbstractUser):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name", "phone"]
+    REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
