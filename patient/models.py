@@ -64,7 +64,7 @@ class CustomUser(AbstractBaseUser):
     identificationType = models.CharField(max_length=100, blank=True, null=True)
     identificationNumber = models.CharField(max_length=100, blank=True, null=True)
     identificationDocument = models.FileField(
-        upload_to="identification_documents/",
+        upload_to="identification_documents/", blank=True, null=True
     )
     primaryCarePhysician = models.CharField(max_length=100, blank=True, null=True)
     treatmentConsent = models.BooleanField(default=False)
