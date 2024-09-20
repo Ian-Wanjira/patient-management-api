@@ -9,6 +9,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = "__all__"
 
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
+
     def create(self, validated_data):
         patient = CustomUser.objects.create_user(**validated_data)
         return patient
