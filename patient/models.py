@@ -50,7 +50,6 @@ class CustomUser(AbstractBaseUser):
         blank=True,
         null=True,
     )
-    privacyConsent = models.BooleanField(default=False)
     address = models.CharField(max_length=100, blank=True, null=True)
     occupation = models.CharField(max_length=100, blank=True, null=True)
     emergencyContactName = models.CharField(max_length=100, blank=True, null=True)
