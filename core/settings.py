@@ -2,6 +2,9 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
 import environ
 
 env = environ.Env()
@@ -135,3 +138,9 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 CORS_ALLOW_CREDENTIALS = True
+
+cloudinary.config(
+    cloud_name=env("CLOUDINARY_CLOUD_NAME"),
+    api_key=env("CLOUDINARY_API_KEY"),
+    api_secret=env("CLOUDINARY_API_SECRET"),
+)
