@@ -13,6 +13,9 @@ class PatientSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(source="user.phone")
     password = serializers.CharField(write_only=True, source="user.password")
 
+    # Cloudinary image field
+    identificationDocument = serializers.FileField()
+
     class Meta:
         model = Patient
         fields = [
