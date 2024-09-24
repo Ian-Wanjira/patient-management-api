@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.db import models
 
 from accounts.models import CustomUser
@@ -25,9 +26,7 @@ class Patient(models.Model):
     pastMedicalHistory = models.TextField(blank=True, null=True)
     identificationType = models.CharField(max_length=100, blank=True, null=True)
     identificationNumber = models.CharField(max_length=100, blank=True, null=True)
-    identificationDocument = models.FileField(
-        upload_to="identification_documents/", blank=True, null=True
-    )
+    identificationDocument = CloudinaryField("file", blank=True, null=True)
     primaryCarePhysician = models.CharField(max_length=100, blank=True, null=True)
     treatmentConsent = models.BooleanField(default=False)
     disclosureConsent = models.BooleanField(default=False)
