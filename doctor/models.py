@@ -1,13 +1,11 @@
-import uuid
-
+from cloudinary.models import CloudinaryField
 from django.db import models
+
+from accounts.models import CustomUser
 
 
 class Doctor(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True)
-    image = models.ImageField(upload_to="doctor_images")
-
-    def __str__(self):
-        self.email
+    user = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, related_name="doctor_profile"
+    )
+    image = CloudinaryField("image", blank=True, null=True)
