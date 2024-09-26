@@ -26,6 +26,14 @@ class DoctorListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class DoctorDetailView(APIView):
+    def get(self, request, pk):
+        user = User.objects.get(id=pk)
+        doctor = Doctor.objects.get(user=user)
+        serializer = DoctorSerializer(doctor)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class DeleteDoctorView(APIView):
     def delete(self, request, pk):
         user = User.objects.get(id=pk)
