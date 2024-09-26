@@ -21,6 +21,13 @@ class AppointmentListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class AppointmentDetailView(APIView):
+    def get(self, request, pk):
+        appointment = Appointment.objects.get(id=pk)
+        serializer = AppointmentSerializer(appointment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class DeleteAppointmentView(APIView):
     def delete(self, request, pk):
         appointment = Appointment.objects.get(id=pk)
