@@ -1,6 +1,11 @@
 from django.urls import path
 
-from .views import AppointmentListView, DeleteAppointmentView, ScheduleAppointmentView
+from .views import (
+    AppointmentDetailView,
+    AppointmentListView,
+    DeleteAppointmentView,
+    ScheduleAppointmentView,
+)
 
 urlpatterns = [
     path(
@@ -10,4 +15,5 @@ urlpatterns = [
     ),
     path("list/", AppointmentListView.as_view(), name="list"),
     path("delete/<int:pk>/", DeleteAppointmentView.as_view(), name="delete"),
+    path("<pk>/", AppointmentDetailView.as_view(), name="detail"),
 ]
