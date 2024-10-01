@@ -23,7 +23,12 @@ class AppointmentListView(APIView):
 
 class AppointmentDetailView(APIView):
     def get(self, request, pk):
-        appointment = Appointment.objects.get(id=pk)
+        try:
+            appointment = Appointment.objects.get(id=pk)
+        except Appointment.DoesNotExist:
+            return Response(
+                {"error": "Appointment not found"}, status=status.HTTP_404_NOT_FOUND
+            )
         serializer = AppointmentSerializer(appointment)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
