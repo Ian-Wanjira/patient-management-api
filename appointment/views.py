@@ -28,6 +28,22 @@ class AppointmentDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class AppointmentUpdateView(APIView):
+    def put(self, request, pk):
+        try:
+            appointment = Appointment.objects.get(id=pk)
+        except Appointment.DoesNotExist:
+            return Response(
+                {"error": "Appointment not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = AppointmentSerializer(appointment, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class DeleteAppointmentView(APIView):
     def delete(self, request, pk):
         appointment = Appointment.objects.get(id=pk)
