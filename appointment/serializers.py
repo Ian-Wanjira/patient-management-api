@@ -39,6 +39,25 @@ class AppointmentSerializer(serializers.ModelSerializer):
         )
         return appointment
 
+    def update(self, instance, validated_data):
+        patient_uuid = validated_data.pop("patient", None)
+        doctor_uuid = validated_data.pop("doctor", None)
+
+        if patient_uuid:
+            patient = Patient.objects.get(user__pk=patient_uuid)
+            instance.patient = patient
+
+        if doctor_uuid:
+            doctor = Doctor.objects.get(user__pk=doctor_uuid)
+            instance.doctor = doctor
+
+        # Update other fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation["patient"] = PatientSerializer(instance.patient).data
