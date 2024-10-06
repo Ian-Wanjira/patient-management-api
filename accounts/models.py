@@ -45,10 +45,3 @@ class CustomUser(AbstractBaseUser):
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
-
-
-# class Doctor(models.Model):
-#     user = models.OneToOneField(
-#         CustomUser, on_delete=models.CASCADE, related_name="doctor_profile"
-#     )
-#     image = models.ImageField(upload_to="doctor_images")
