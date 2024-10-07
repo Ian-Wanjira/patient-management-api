@@ -16,9 +16,14 @@ class ScheduleAppointmentView(APIView):
 
 class AppointmentListView(APIView):
     def get(self, request):
-        appointments = Appointment.objects.all()
-        serializer = AppointmentSerializer(appointments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            appointments = Appointment.objects.all()
+            serializer = AppointmentSerializer(appointments, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class AppointmentDetailView(APIView):
