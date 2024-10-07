@@ -23,6 +23,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "notes",
             "cancellationReason",
             "status",
+            "created_at",
+            "updated_at",
         ]
 
     def create(self, validated_data):
