@@ -26,6 +26,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+        order_by = "updated_at"
 
     def create(self, validated_data):
         patient_uuid = validated_data.pop("patient")
