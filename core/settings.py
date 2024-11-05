@@ -136,7 +136,7 @@ SIMPLE_JWT = {
     "AUTH_COOKIE_SAMESITE": "Lax",
 }
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOWED_ORIGINS = ["https://patient-management-frontend-five.vercel.app/"]
 
 CORS_ALLOW_CREDENTIALS = True
 
