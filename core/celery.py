@@ -25,5 +25,4 @@ if app.conf.result_backend.startswith("rediss://"):
 # Load settings from Django settings
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
-# Discover tasks from installed Django apps
 app.autodiscover_tasks()
