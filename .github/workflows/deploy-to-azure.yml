@@ -25,12 +25,12 @@ jobs:
 
     - name: Build and Push API Image
       run: |
-        docker build -t patientmanagementacr.azurecr.io/patient_management_api:latest -f api/Dockerfile .
+        docker build -t patientmanagementacr.azurecr.io/patient_management_api:latest -f Dockerfile .
         docker push patientmanagementacr.azurecr.io/patient_management_api:latest
 
     - name: Build and Push Celery Worker Image
       run: |
-        docker build -t patientmanagementacr.azurecr.io/patient_management_celery:latest -f celery/Dockerfile .
+        docker build -t patientmanagementacr.azurecr.io/patient_management_celery:latest -f Dockerfile .
         docker push patientmanagementacr.azurecr.io/patient_management_celery:latest
 
     - name: Log in to Azure
