@@ -16,11 +16,13 @@ app = Celery("core")
 app.conf.broker_url = env("CELERY_BROKER_URL")
 app.conf.result_backend = env("CELERY_RESULT_BACKEND")
 
-# SSL settings for Redis
-if app.conf.broker_url.startswith("rediss://"):
-    app.conf.broker_use_ssl = {"ssl_cert_reqs": "CERT_NONE"}
-if app.conf.result_backend.startswith("rediss://"):
-    app.conf.redis_backend_use_ssl = {"ssl_cert_reqs": "CERT_NONE"}
+# Explicit SSL configuration for Redis
+app.conf.broker_transport_options = {
+    "ssl": {
+        "ssl_cert_reqs": None  # Use None for no validation or replace with "required" for CERT_REQUIRED
+    }
+}
+app.conf.redis_backend_transport_options = {"ssl": {"ssl_cert_reqs": None}}
 
 # Load settings from Django settings
 app.config_from_object("django.conf:settings", namespace="CELERY")
